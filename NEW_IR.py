@@ -41,8 +41,10 @@ GPIO.setup(orange_pin, GPIO.OUT)
 GPIO.setup(green_pin, GPIO.OUT)
 
 GPIO.output(buzzer, False)
-print "IR Sensor Ready....."
-print " "
+print
+"IR Sensor Ready....."
+print
+" "
 
 try:
     while True:
@@ -77,25 +79,23 @@ try:
 
         print('Train Distance = ' + '%dcm' % t_distance)
 
-
-
-
         if distance < 20:
             if t_distance < 20:
                 conn = urllib2.urlopen(baseURL + '&field1=%d' % (0))
                 conn.close()
-                
+
                 if GPIO.input(sensor):
-                  GPIO.output(buzzer, False)
-                  
-                  while GPIO.input(sensor):
-                    time.sleep(0.2)
+                    GPIO.output(buzzer, False)
+
+                    while GPIO.input(sensor):
+                        time.sleep(0.2)
                 else:
-                  GPIO.output(buzzer, True)
-                  print "Object Detected"
-                  time.sleep(1)
-                  
-                  
+                    GPIO.output(buzzer, True)
+                    print
+                    "Object Detected"
+                    time.sleep(1)
+
+
             else:
                 conn = urllib2.urlopen(baseURL + '&field1=%d' % (1))
                 conn.close()
@@ -103,14 +103,11 @@ try:
         else:
             conn = urllib2.urlopen(baseURL + '&field1=%d' % (0))
             conn.close()
-            
 
         lcd.text("Punjab Police", 1, 2)
         sleep(1)
 
         lcd.clear()
-
-
 
         URL = 'https://api.thingspeak.com/channels/1919571/fields/1.json?api_key=B1JDOBRA1CN8W0H6&results=1'
         data = requests.get(URL).json()
@@ -124,48 +121,52 @@ try:
         if led_status == '1':
 
             lcd.text("Punjab Police ", 1)
-            sleep(0.5)
+            sleep(0.001)
 
             GPIO.output(red_pin, GPIO.LOW)
+            print('RED Light is OFF')
 
             lcd.text("Punjab Police", 1)
             lcd.text("GET READY", 2)
-            sleep(0.5)
+            
             GPIO.output(orange_pin, GPIO.HIGH)
+            print('ORANGE Light is ON')
             sleep(0.5)
             GPIO.output(orange_pin, GPIO.LOW)
+            print('ORANGE Light is OFF')
 
             lcd.text("Punjab Police", 1)
             lcd.text("GO", 2)
-            sleep(1)
+            
             GPIO.output(green_pin, GPIO.HIGH)
+            print('GREEN Light is ON')
 
-            sleep(0.5)
+            sleep(0.001)
 
             lcd.clear()
-
-            print('Turn on Led')
 
         else:
 
             GPIO.output(green_pin, GPIO.LOW)
-            sleep(0.5)
+            print('GREEN Light is OFF')
+            sleep(0.001)
 
             lcd.text("Punjab Police", 1)
             lcd.text("GET READY", 2)
 
             GPIO.output(orange_pin, GPIO.HIGH)
+            print('ORANGE Light is ON')
             sleep(0.5)
             GPIO.output(orange_pin, GPIO.LOW)
+            print('ORANGE Light is OFF')
 
             lcd.clear()
 
             lcd.text("Punjab Police", 1)
             lcd.text("STOP", 2)
 
-            sleep(0.5)
             GPIO.output(red_pin, GPIO.HIGH)
-            print('Led is Off')
+            print('RED Light is ON')
 
 
 except KeyboardInterrupt:
