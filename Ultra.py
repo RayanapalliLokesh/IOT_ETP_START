@@ -7,6 +7,19 @@ import json
 from time import sleep
 from rpi_lcd import LCD
 
+
+sensor = 38
+buzzer = 36
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(sensor,GPIO.IN)
+GPIO.setup(buzzer,GPIO.OUT)
+
+GPIO.output(buzzer,False)
+print "IR Sensor Ready....."
+print " "
+
+
 lcd = LCD()
 red_pin = 11
 orange_pin = 13
@@ -75,6 +88,7 @@ try:
 			if t_distance < 20:
 				conn = urllib2.urlopen(baseURL + '&field1=%d' % (0))
 				conn.close()
+				
 			else:
 				conn = urllib2.urlopen(baseURL + '&field1=%d' % (1))
 				conn.close()
@@ -134,6 +148,16 @@ try:
 			
 		
 		else:
+			
+			if GPIO.input(sensor):
+				GPIO.output(buzzer,False)
+				while GPIO.input(sensor):
+					time.sleep(1)
+			else:
+				GPIO.output(buzzer,True)
+				print "Object Detected"
+				time.sleep(1)
+			
 			print('Red Light ON')
 			
 			GPIO.output(green_pin, GPIO.LOW)
@@ -154,8 +178,7 @@ try:
 			lcd.text("STOP",2)
 			
 			sleep(2)
-			GPIO.output(red_pin, GPIO.HIGH)
-			
+			GPIO.output(red_pin, GPIO.HIGH)	
 		
 	#time.sleep(15)
 		
